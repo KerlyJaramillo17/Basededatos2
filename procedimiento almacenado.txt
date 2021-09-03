@@ -1,0 +1,22 @@
+create or replace function ventas_cliente(cedula_cli integer)
+RETURNS TABLE (
+	fecha_venta date,
+	cantidad_libro integer,
+	titulo_libro varchar,
+	total_venta integer)
+as $BODY$
+begin
+	RETURN QUERY
+	select 
+			VENTA_LIBROS_A_CLIENTE.fecha_venta,
+			VENTA_LIBROS_A_CLIENTE.cantidad_libro_venta,
+			libro.TITULO_LIBRO as titulo,
+			VENTA_LIBROS_A_CLIENTE.total_A_pagar
+			from libro
+			inner join VENTA_LIBROS_A_CLIENTE on VENTA_LIBROS_A_CLIENTE.id_libro = libro.id_libro
+			inner join cliente on cliente.id_cliente = VENTA_LIBROS_A_CLIENTE.id_cliente
+			where cliente.cedula_cliente = cedula_cli;
+end
+$BODY$ language plpgsql;
+
+select * from ventas_cliente(1316818947);

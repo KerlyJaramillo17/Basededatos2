@@ -1,0 +1,26 @@
+do $$
+declare
+	registro RECORD;
+	cur_can CURSOR for
+		select 
+			
+			version.descripcion as versionlibro,
+			libro.TITULO_LIBRO as titulo,
+			libro.stock_libro as stock, 
+			sum(VENTA_LIBROS_A_CLIENTE.cantidad_libro_venta) as vendidos
+			from libro
+			inner join version on version.id_version = libro.id_version
+			inner join VENTA_LIBROS_A_CLIENTE on VENTA_LIBROS_A_CLIENTE.id_libro = libro.id_libro
+			group by version.descripcion,
+			libro.TITULO_LIBRO ,
+			libro.stock_libro;
+begin
+OPEN cur_can;
+Fetch cur_can into registro;
+while (found) loop
+raise notice 'versionlibro: % | titulo:%| stock: %| vendidos: % '
+,registro.versionlibro, registro.titulo,  registro.stock, registro.vendidos;
+Fetch cur_can into registro;
+end loop;
+end $$
+language 'plpgsql';

@@ -1,0 +1,8 @@
+select 
+			libro.TITULO_LIBRO as titulo,
+			sum(VENTA_LIBROS_A_CLIENTE.cantidad_libro_venta) as vendidos,
+			sum(VENTA_LIBROS_A_CLIENTE.total_a_pagar) as total
+			from libro
+			inner join version on version.id_version = libro.id_version
+			inner join VENTA_LIBROS_A_CLIENTE on VENTA_LIBROS_A_CLIENTE.id_libro = libro.id_libro
+			group by libro.TITULO_LIBRO ;
